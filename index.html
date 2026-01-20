@@ -7,7 +7,12 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-image: url("nature.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
+
 
 
 h1 {
@@ -52,9 +57,6 @@ select {
 /* 🌿 Intro Screen */
 #introScreen {
   height: 100vh;
-  background-image: url("nature.png");
-  background-size: cover;
-  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,9 +104,6 @@ blockquote span {
 /* 🔐 Password Screen */
 #passwordScreen {
   height: 100vh;
-  background-image: url("nature.png");
-  background-size: cover;
-  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,19 +124,29 @@ blockquote span {
 }
 
 #palette {
-  width: 180px;
+  width: 160px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 8px;
+  align-content: start;
 }
 
 .palette-btn {
-  padding: 10px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: bold;
   border: 1px solid #999;
   cursor: pointer;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
 }
+.palette-current {
+  border: 2px solid #007bff;
+}
+
+
 
 .palette-answered {
   background: #4caf50;
@@ -195,7 +204,8 @@ blockquote span {
 </div>
 
 <div id="siteContent" style="display:none;">
-  
+
+<div class="introCard" style="max-width:900px; margin:auto;">
 <h1>Test Platform</h1>
 
 <select id="topicSelect" onchange="startTest()">
@@ -218,7 +228,7 @@ blockquote span {
   <div id="palette"></div>
 
 </div>
-
+</div>
 
 <h2 id="result"></h2>
 </div>
@@ -348,12 +358,16 @@ function updatePalette() {
   const buttons = document.querySelectorAll("#palette button");
 
   buttons.forEach((btn, index) => {
-    btn.classList.remove("palette-answered", "palette-seen");
+    btn.classList.remove("palette-answered", "palette-seen", "palette-current");
 
     if (answers[index] !== null) {
-      btn.classList.add("palette-answered");   // 🟢
+      btn.classList.add("palette-answered");
     } else if (visited[index]) {
-      btn.classList.add("palette-seen");       // 🔴
+      btn.classList.add("palette-seen");
+    }
+
+    if (index === currentIndex) {
+      btn.classList.add("palette-current");
     }
   });
 }
