@@ -300,6 +300,7 @@ blockquote span {
 </div>
 <script src="questions.js"></script>
 <script>
+"use strict";
 
 let answers = [];       // stores selected option index or null
 let visited = [];       // true if question was opened
@@ -551,7 +552,6 @@ function updatePalette() {
     document.getElementById("resultCard").appendChild(btn);
   }
 }
-
 
 
 
