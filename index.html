@@ -13,6 +13,13 @@ body {
   background-attachment: fixed;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: -1;
+}
 
 
 h1 {
@@ -96,11 +103,11 @@ blockquote span {
   color: #555;
 }
 
-     #siteContent {
-  background: #f4f6f8;
+#siteContent {
   min-height: 100vh;
   padding: 30px;
 }
+
 /* 🔐 Password Screen */
 #passwordScreen {
   height: 100vh;
