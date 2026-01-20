@@ -303,12 +303,6 @@ function nextQuestion() {
     return;
   }
 
-  if (Number(selected.value) === questions[currentIndex].correct) {
-    score++;
-  }
-
-  currentIndex++;
-
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     showQuestion();
@@ -318,10 +312,19 @@ function nextQuestion() {
 }
 
 function finishTest() {
+  score = 0;
+
+  answers.forEach((ans, index) => {
+    if (ans !== null && ans === questions[index].correct) {
+      score++;
+    }
+  });
+
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("result").innerText =
     `Test Completed! Score: ${score} / ${questions.length}`;
-  
+}
+
  function buildPalette() {
   const palette = document.getElementById("palette");
   palette.innerHTML = "";
@@ -360,7 +363,7 @@ function updatePalette() {
 }
 
 
-}
+
 </script>
 
 </body>
