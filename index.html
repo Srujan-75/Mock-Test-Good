@@ -395,6 +395,8 @@ function finishTest() {
     if (ans !== null && ans === questions[index].correct) {
       score++;
     }
+    card.scrollIntoView({ behavior: "smooth" });
+
   });
 
   const percentage = (score / questions.length) * 100;
