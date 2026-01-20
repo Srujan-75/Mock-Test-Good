@@ -124,6 +124,30 @@ blockquote span {
   display: none !important;
 }
 
+#palette {
+  width: 180px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.palette-btn {
+  padding: 10px;
+  border: 1px solid #999;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 5px;
+}
+
+.palette-answered {
+  background: #4caf50;
+  color: white;
+}
+
+.palette-seen {
+  background: #f44336;
+  color: white;
+}
 
 
 </style>
@@ -180,16 +204,29 @@ blockquote span {
   <option value="MIMO">MIMO</option>
 </select>
 
-<div id="quizBox" style="display:none; margin-top:20px;">
-  <h3 id="questionText"></h3>
-  <div id="options"></div>
-  <button onclick="nextQuestion()">Next</button>
+<div style="display:flex; gap:20px; justify-content:center;">
+
+  <!-- Question Area -->
+  <div id="quizBox" style="display:none; margin-top:20px;">
+    <h3 id="questionText"></h3>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+
+  <!-- Question Palette -->
+  <div id="palette"></div>
+
 </div>
+
 
 <h2 id="result"></h2>
 </div>
 <script src="questions.js"></script>
 <script>
+
+let answers = [];       // stores selected option index or null
+let visited = [];       // true if question was opened
+
 let questions = [];
 let currentIndex = 0;
 let score = 0;
@@ -202,14 +239,19 @@ function startTest() {
   currentIndex = 0;
   score = 0;
 
+  answers = new Array(questions.length).fill(null);
+  visited = new Array(questions.length).fill(false);
+
   document.getElementById("quizBox").style.display = "block";
   document.getElementById("result").innerText = "";
 
-
+  buildPalette();
   showQuestion();
 }
 
 function showQuestion() {
+  visited[currentIndex] = true;
+
   const q = questions[currentIndex];
   document.getElementById("questionText").innerText =
     `${currentIndex + 1}. ${q.question}`;
@@ -217,18 +259,20 @@ function showQuestion() {
   const optionsDiv = document.getElementById("options");
   optionsDiv.innerHTML = "";
 
-  document.querySelectorAll('input[name="option"]').forEach(r => r.checked = false);
-
-
   q.options.forEach((opt, i) => {
+    const checked = answers[currentIndex] === i ? "checked" : "";
     optionsDiv.innerHTML += `
       <label>
-        <input type="radio" name="option" value="${i}">
+        <input type="radio" name="option" value="${i}" ${checked}
+               onchange="saveAnswer(${i})">
         ${opt}
       </label><br>
     `;
   });
+
+  updatePalette();
 }
+
 
 
 const SITE_PASSWORD = "mock123";   // 🔐 change this anytime
@@ -265,7 +309,8 @@ function nextQuestion() {
 
   currentIndex++;
 
-  if (currentIndex < questions.length) {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
     showQuestion();
   } else {
     finishTest();
@@ -276,7 +321,44 @@ function finishTest() {
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("result").innerText =
     `Test Completed! Score: ${score} / ${questions.length}`;
- 
+  
+ function buildPalette() {
+  const palette = document.getElementById("palette");
+  palette.innerHTML = "";
+
+  questions.forEach((_, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = index + 1;
+    btn.className = "palette-btn";
+    btn.onclick = () => goToQuestion(index);
+    palette.appendChild(btn);
+  });
+}
+
+  function saveAnswer(optionIndex) {
+  answers[currentIndex] = optionIndex;
+  updatePalette();
+}
+
+function updatePalette() {
+  const buttons = document.querySelectorAll("#palette button");
+
+  buttons.forEach((btn, index) => {
+    btn.classList.remove("palette-answered", "palette-seen");
+
+    if (answers[index] !== null) {
+      btn.classList.add("palette-answered");   // 🟢
+    } else if (visited[index]) {
+      btn.classList.add("palette-seen");       // 🔴
+    }
+  });
+}
+
+  function goToQuestion(index) {
+  currentIndex = index;
+  showQuestion();
+}
+
 
 }
 </script>
