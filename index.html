@@ -320,7 +320,7 @@ function startTest() {
   visited = new Array(questions.length).fill(false);
 
   document.getElementById("quizBox").style.display = "block";
-  document.getElementById("result").innerText = "";
+ 
 
   buildPalette();
   showQuestion();
@@ -389,15 +389,54 @@ function nextQuestion() {
 }
 
 function finishTest() {
-  score = 0;
+  let score = 0;
 
   answers.forEach((ans, index) => {
     if (ans !== null && ans === questions[index].correct) {
       score++;
     }
-    card.scrollIntoView({ behavior: "smooth" });
-
   });
+
+  const percentage = (score / questions.length) * 100;
+
+  document.getElementById("quizBox").style.display = "none";
+  document.getElementById("palette").style.display = "none";
+
+  const card = document.getElementById("resultCard");
+  const circle = document.getElementById("scoreCircle");
+  const verseBox = document.getElementById("bibleVerse");
+
+  card.style.display = "block";
+  circle.innerText = `${score} / ${questions.length}`;
+
+  if (percentage >= 75) {
+    circle.className = "score-circle score-good";
+    verseBox.innerHTML = `
+      “The Lord bless you and keep you;
+      the Lord make His face shine upon you.”
+      <span>— Numbers 6:24–26</span>
+    `;
+  } 
+  else if (percentage >= 25) {
+    circle.className = "score-circle score-average";
+    verseBox.innerHTML = `
+      “Let us not grow weary of doing good,
+      for in due season we shall reap.”
+      <span>— Galatians 6:9</span>
+    `;
+  } 
+  else {
+    circle.className = "score-circle score-poor";
+    verseBox.innerHTML = `
+      “For I know the plans I have for you,
+      plans to give you hope and a future.”
+      <span>— Jeremiah 29:11</span>
+    `;
+  }
+
+  card.scrollIntoView({ behavior: "smooth" });
+}
+
 
   const percentage = (score / questions.length) * 100;
 
