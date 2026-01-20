@@ -102,7 +102,7 @@ blockquote span {
 /* 🔐 Password Screen */
 #passwordScreen {
   height: 100vh;
-  background-image: url("nature.jpg");
+  background-image: url("nature.png");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -118,6 +118,10 @@ blockquote span {
   border: 1px solid #ccc;
   outline: none;
   text-align: center;
+}
+
+.hiddenScreen {
+  display: none;
 }
 
 
@@ -146,7 +150,8 @@ blockquote span {
   </div>
 </div>
 
-<div id="passwordScreen" style="display:none;">
+<div id="passwordScreen" class="hiddenScreen">
+
   <div class="introCard">
     <h2>Enter Access Password</h2>
 
@@ -224,17 +229,19 @@ function showQuestion() {
   });
 }
 
-function enterSite() {
-  document.getElementById("introScreen").style.display = "none";
-  document.getElementById("passwordScreen").style.display = "flex";
-}
+
 const SITE_PASSWORD = "mock123";   // 🔐 change this anytime
+
+function enterSite() {
+  document.getElementById("introScreen").classList.add("hiddenScreen");
+  document.getElementById("passwordScreen").classList.remove("hiddenScreen");
+}
 
 function checkPassword() {
   const entered = document.getElementById("passwordInput").value;
 
   if (entered === SITE_PASSWORD) {
-    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("passwordScreen").classList.add("hiddenScreen");
     document.getElementById("siteContent").style.display = "block";
   } else {
     document.getElementById("passwordError").innerText =
