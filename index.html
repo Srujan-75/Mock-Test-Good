@@ -99,6 +99,26 @@ blockquote span {
   min-height: 100vh;
   padding: 30px;
 }
+/* 🔐 Password Screen */
+#passwordScreen {
+  height: 100vh;
+  background-image: url("nature.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#passwordScreen input {
+  padding: 10px;
+  width: 220px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  text-align: center;
+}
 
 
 </style>
@@ -125,6 +145,25 @@ blockquote span {
     <button onclick="enterSite()">Start Test</button>
   </div>
 </div>
+
+<div id="passwordScreen" style="display:none;">
+  <div class="introCard">
+    <h2>Enter Access Password</h2>
+
+    <p style="margin-bottom:15px;">
+      This test is intended for authorized students only.
+    </p>
+
+    <input type="password" id="passwordInput" placeholder="Password">
+
+    <br><br>
+
+    <button onclick="checkPassword()">Continue</button>
+
+    <p id="passwordError" style="color:red; margin-top:10px;"></p>
+  </div>
+</div>
+
 <div id="siteContent" style="display:none;">
   
 <h1>Mock Test Platform</h1>
@@ -187,8 +226,22 @@ function showQuestion() {
 
 function enterSite() {
   document.getElementById("introScreen").style.display = "none";
-  document.getElementById("siteContent").style.display = "block";
+  document.getElementById("passwordScreen").style.display = "flex";
 }
+const SITE_PASSWORD = "mock123";   // 🔐 change this anytime
+
+function checkPassword() {
+  const entered = document.getElementById("passwordInput").value;
+
+  if (entered === SITE_PASSWORD) {
+    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("siteContent").style.display = "block";
+  } else {
+    document.getElementById("passwordError").innerText =
+      "Incorrect password. Please try again.";
+  }
+}
+
 
 function nextQuestion() {
   const selected = document.querySelector('input[name="option"]:checked');
