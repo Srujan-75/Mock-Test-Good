@@ -48,10 +48,78 @@ select {
   font-size: 16px;
 }
 
+/* 🌿 Intro Screen */
+#introScreen {
+  height: 100vh;
+  background-image: url("nature.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.introCard {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.studentImg {
+  width: 150px;
+  margin-bottom: 15px;
+}
+
+.introCard h2 {
+  margin-bottom: 10px;
+}
+
+.introCard p {
+  font-size: 15px;
+  color: #333;
+}
+
+blockquote {
+  font-style: italic;
+  margin: 15px 0;
+  color: #2c3e50;
+}
+
+blockquote span {
+  font-size: 13px;
+  color: #555;
+}
+
+
 </style>
 </head>
 <body>
 
+<div id="introScreen">
+  <div class="introCard">
+    <img src="student.png" alt="Student" class="studentImg">
+
+    <h2>Hi! Welcome 👋</h2>
+
+    <p>
+      I’m here to help you test your knowledge and grow step by step.
+      Take a deep breath, focus, and give your best!
+    </p>
+
+    <blockquote>
+      “The mind of the prudent acquires knowledge,
+      and the ear of the wise seeks knowledge.”
+      <br><span>— Proverbs 18:15</span>
+    </blockquote>
+
+    <button onclick="enterSite()">Start Test</button>
+  </div>
+</div>
+<div id="siteContent" style="display:none;">
+  
 <h1>Mock Test Platform</h1>
 
 <select id="topicSelect" onchange="startTest()">
@@ -67,7 +135,7 @@ select {
 </div>
 
 <h2 id="result"></h2>
-
+</div>
 <script src="questions.js"></script>
 <script>
 let questions = [];
@@ -84,7 +152,7 @@ function startTest() {
 
   document.getElementById("quizBox").style.display = "block";
   document.getElementById("result").innerText = "";
-document.querySelector("button").disabled = false;
+
 
   showQuestion();
 }
@@ -108,6 +176,11 @@ function showQuestion() {
       </label><br>
     `;
   });
+}
+
+function enterSite() {
+  document.getElementById("introScreen").style.display = "none";
+  document.getElementById("siteContent").style.display = "block";
 }
 
 function nextQuestion() {
@@ -135,7 +208,7 @@ function finishTest() {
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("result").innerText =
     `Test Completed! Score: ${score} / ${questions.length}`;
-  document.querySelector("button").disabled = true;
+ 
 
 }
 </script>
