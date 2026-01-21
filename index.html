@@ -244,21 +244,15 @@ blockquote span {
 
 <div id="passwordScreen" class="hiddenScreen">
 
-  <div class="introCard">
-    <h2>Enter Access Password</h2>
+<div class="introCard">
+  <h2>Login Required</h2>
+  <p>Please sign in using Google to continue</p>
 
-    <p style="margin-bottom:15px;">
-      This test is intended for authorized students only.
-    </p>
+  <button onclick="googleLogin()">Login with Google</button>
 
-    <input type="password" id="passwordInput" placeholder="Password">
+  <p id="loginError" style="color:red;"></p>
+</div>
 
-    <br><br>
-
-    <button onclick="checkPassword()">Continue</button>
-
-    <p id="passwordError" style="color:red; margin-top:10px;"></p>
-  </div>
 </div>
 
 <div id="siteContent" style="display:none;">
@@ -303,7 +297,44 @@ blockquote span {
 
 </div>
 <script src="questions.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+
 <script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDBE1w09eYl78VrNZPq65Hyp8sQ4P5KTqE",
+  authDomain: "mock-test-4ac5d.firebaseapp.com",
+  projectId: "mock-test-4ac5d",
+  appId: "1:704532603753:web:a699e6ac03b2277a7153f8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+
+  auth.onAuthStateChanged(user => {
+  if (user) {
+    currentUser = {
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email
+    };
+
+    // Hide intro & login screens
+    document.getElementById("introScreen").classList.add("hiddenScreen");
+    document.getElementById("passwordScreen").classList.add("hiddenScreen");
+
+    // Show main site
+    document.getElementById("siteContent").style.display = "block";
+
+    console.log("Auto-login:", user.email);
+  }
+});
+
 
 let answers = [];       // stores selected option index or null
 let visited = [];       // true if question was opened
@@ -410,6 +441,37 @@ function finishTest() {
   });
 
   const percentage = (score / questions.length) * 100;
+  // 🔥 SAVE RESULT TO FIRESTORE
+const userRef = db.collection("users").doc(currentUser.uid);
+
+userRef.get().then(doc => {
+  let data;
+
+  if (doc.exists) {
+    data = doc.data();
+  } else {
+    data = {
+      name: currentUser.name,
+      email: currentUser.email,
+      attempts: 0,
+      bestScore: 0,
+      history: []
+    };
+  }
+
+  data.attempts += 1;
+  if (score > data.bestScore) data.bestScore = score;
+
+  data.history.push({
+    score: score,
+    total: questions.length,
+    topic: document.getElementById("topicSelect").value,
+    time: new Date().toLocaleString()
+  });
+
+  userRef.set(data);
+});
+
 
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
@@ -491,6 +553,30 @@ function updatePalette() {
   showQuestion();
 }
 
+let currentUser = null;
+
+function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  auth.signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+
+      currentUser = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email
+      };
+
+      document.getElementById("passwordScreen").classList.add("hiddenScreen");
+      document.getElementById("siteContent").style.display = "block";
+
+      alert(`Welcome ${user.displayName}`);
+    })
+    .catch(error => {
+      document.getElementById("loginError").innerText = error.message;
+    });
+}
 
 
 </script>
