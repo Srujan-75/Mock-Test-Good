@@ -265,7 +265,9 @@ blockquote span {
   <option value="Bible">Bible</option>
   <option value="CS_and_CG_MOSFET_Small_Signal">CS_and_CG_MOSFET_Small_Signal</option>
 </select>
-
+<button onclick="showResults()" style="margin-top:10px;">
+  View Results
+</button>
 
 <div style="display:flex; gap:20px; justify-content:center;">
 
@@ -348,6 +350,9 @@ function startTest() {
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
 
+  // ✅ HIDE OLD RESULTS WHEN NEW TEST STARTS
+  document.getElementById("resultCard").style.display = "none";
+
   questions = questionBank[topic];
   currentIndex = 0;
   score = 0;
@@ -356,11 +361,11 @@ function startTest() {
   visited = new Array(questions.length).fill(false);
 
   document.getElementById("quizBox").style.display = "block";
- 
 
   buildPalette();
   showQuestion();
 }
+
 
 function showQuestion() {
   visited[currentIndex] = true;
@@ -441,75 +446,47 @@ function finishTest() {
     }
   });
 
-  const percentage = (score / questions.length) * 100;
-  // 🔥 SAVE RESULT TO FIRESTORE
-const userRef = db.collection("users").doc(currentUser.uid);
+  const topic = document.getElementById("topicSelect").value;
 
-userRef.get().then(doc => {
-  let data;
+  // 🔥 SAVE RESULT TO FIRESTORE (SILENTLY)
+  const userRef = db.collection("users").doc(currentUser.uid);
 
-  if (doc.exists) {
-    data = doc.data();
-  } else {
-    data = {
-      name: currentUser.name,
-      email: currentUser.email,
-      attempts: 0,
-      bestScore: 0,
-      history: []
-    };
-  }
+  userRef.get().then(doc => {
+    let data;
 
-  data.attempts += 1;
-  if (score > data.bestScore) data.bestScore = score;
+    if (doc.exists) {
+      data = doc.data();
+    } else {
+      data = {
+        name: currentUser.name,
+        email: currentUser.email,
+        attempts: 0,
+        bestScore: 0,
+        history: []
+      };
+    }
 
-  data.history.push({
-    score: score,
-    total: questions.length,
-    topic: document.getElementById("topicSelect").value,
-    time: new Date().toLocaleString()
+    data.attempts += 1;
+
+    if (score > data.bestScore) {
+      data.bestScore = score;
+    }
+
+    data.history.push({
+      topic: topic,
+      score: score,
+      total: questions.length,
+      time: new Date().toLocaleString()
+    });
+
+    userRef.set(data);
   });
 
-  userRef.set(data);
-});
-
-
+  // ✅ END EXAM MODE (NO RESULTS SHOWN)
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
 
-  const card = document.getElementById("resultCard");
-  const circle = document.getElementById("scoreCircle");
-  const verseBox = document.getElementById("bibleVerse");
-
-  card.style.display = "block";
-  circle.innerText = `${score} / ${questions.length}`;
-
-  if (percentage >= 75) {
-    circle.className = "score-circle score-good";
-    verseBox.innerHTML = `
-      “The Lord bless you and keep you;
-      the Lord make His face shine upon you.”
-      <span>— Numbers 6:24–26</span>
-    `;
-  } 
-  else if (percentage >= 25) {
-    circle.className = "score-circle score-average";
-    verseBox.innerHTML = `
-      “Let us not grow weary of doing good,
-      for in due season we shall reap.”
-      <span>— Galatians 6:9</span>
-    `;
-  } 
-  else {
-    circle.className = "score-circle score-poor";
-    verseBox.innerHTML = `
-      “For I know the plans I have for you,
-      plans to give you hope and a future.”
-      <span>— Jeremiah 29:11</span>
-    `;
-  }
-
-  card.scrollIntoView({ behavior: "smooth" });
+  alert("Test submitted successfully. Click 'View Results' to see your score.");
 }
 
 
@@ -577,6 +554,72 @@ function googleLogin() {
     .catch(error => {
       document.getElementById("loginError").innerText = error.message;
     });
+}
+function showResults() {
+  const topic = document.getElementById("topicSelect").value;
+
+  if (!topic) {
+    alert("Please select a topic to view results");
+    return;
+  }
+
+  const userRef = db.collection("users").doc(currentUser.uid);
+
+  userRef.get().then(doc => {
+    if (!doc.exists) {
+      alert("No results found");
+      return;
+    }
+
+    const data = doc.data();
+    const attempts = data.history.filter(h => h.topic === topic);
+
+    if (attempts.length === 0) {
+      alert("No attempts for this topic yet");
+      return;
+    }
+
+    // ✅ show latest attempt only
+    const lastAttempt = attempts[attempts.length - 1];
+
+    const score = lastAttempt.score;
+    const total = lastAttempt.total;
+    const percentage = (score / total) * 100;
+
+    const card = document.getElementById("resultCard");
+    const circle = document.getElementById("scoreCircle");
+    const verseBox = document.getElementById("bibleVerse");
+
+    card.style.display = "block";
+    circle.innerText = `${score} / ${total}`;
+
+    // 🎨 score color + 📖 verse
+    if (percentage >= 75) {
+      circle.className = "score-circle score-good";
+      verseBox.innerHTML = `
+        “Well done, good and faithful servant.”
+        <span>— Matthew 25:21</span>
+      `;
+    }
+    else if (percentage >= 25) {
+      circle.className = "score-circle score-average";
+      verseBox.innerHTML = `
+        “Let us not grow weary of doing good,
+        for in due season we shall reap.”
+        <span>— Galatians 6:9</span>
+      `;
+    }
+    else {
+      circle.className = "score-circle score-poor";
+      verseBox.innerHTML = `
+        “For I know the plans I have for you,
+        plans to give you hope and a future.”
+        <span>— Jeremiah 29:11</span>
+      `;
+    }
+
+    card.scrollIntoView({ behavior: "smooth" });
+  });
 }
 
 
