@@ -265,9 +265,15 @@ blockquote span {
   <option value="Bible">Bible</option>
   <option value="CS_and_CG_MOSFET_Small_Signal">CS_and_CG_MOSFET_Small_Signal</option>
 </select>
+  
 <button onclick="showResults()" style="margin-top:10px;">
   View Results
 </button>
+
+<button onclick="retestTopic()" style="margin-top:10px; background:#28a745;">
+  Retest
+</button>
+
 
 <div style="display:flex; gap:20px; justify-content:center;">
 
@@ -617,6 +623,109 @@ function showResults() {
         <span>— Jeremiah 29:11</span>
       `;
     }
+
+    card.scrollIntoView({ behavior: "smooth" });
+  });
+}
+
+  function retestTopic() {
+  const topic = document.getElementById("topicSelect").value;
+
+  if (!topic) {
+    alert("Please select a topic first");
+    return;
+  }
+
+  // Hide results
+  document.getElementById("resultCard").style.display = "none";
+
+  // Restart test (reuse existing logic)
+  startTest();
+}
+
+  function showResults() {
+  const topic = document.getElementById("topicSelect").value;
+
+  if (!topic) {
+    alert("Please select a topic to view results");
+    return;
+  }
+
+  const userRef = db.collection("users").doc(currentUser.uid);
+
+  userRef.get().then(doc => {
+    if (!doc.exists) {
+      alert("No results found");
+      return;
+    }
+
+    const data = doc.data();
+    const attempts = data.history.filter(h => h.topic === topic);
+
+    if (attempts.length === 0) {
+      alert("No attempts for this topic yet");
+      return;
+    }
+
+    // 🔵 Latest attempt
+    const latest = attempts[attempts.length - 1];
+    const percentage = (latest.score / latest.total) * 100;
+
+    const card = document.getElementById("resultCard");
+    const circle = document.getElementById("scoreCircle");
+    const verseBox = document.getElementById("bibleVerse");
+
+    card.style.display = "block";
+    circle.innerText = `${latest.score} / ${latest.total}`;
+
+    if (percentage >= 75) {
+      circle.className = "score-circle score-good";
+      verseBox.innerHTML = `
+        “Well done, good and faithful servant.”
+        <span>— Matthew 25:21</span>
+      `;
+    } else if (percentage >= 25) {
+      circle.className = "score-circle score-average";
+      verseBox.innerHTML = `
+        “Let us not grow weary of doing good.”
+        <span>— Galatians 6:9</span>
+      `;
+    } else {
+      circle.className = "score-circle score-poor";
+      verseBox.innerHTML = `
+        “For I know the plans I have for you.”
+        <span>— Jeremiah 29:11</span>
+      `;
+    }
+
+    // 📊 History Table
+    let tableHTML = `
+      <h3 style="margin-top:30px;">Previous Attempts (${topic})</h3>
+      <table style="width:100%; border-collapse:collapse;">
+        <tr style="background:#f2f2f2;">
+          <th style="border:1px solid #ccc; padding:8px;">Attempt</th>
+          <th style="border:1px solid #ccc; padding:8px;">Score</th>
+          <th style="border:1px solid #ccc; padding:8px;">Date & Time</th>
+        </tr>
+    `;
+
+    attempts.forEach((a, index) => {
+      tableHTML += `
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">${index + 1}</td>
+          <td style="border:1px solid #ccc; padding:8px;">
+            ${a.score} / ${a.total}
+          </td>
+          <td style="border:1px solid #ccc; padding:8px;">
+            ${a.time}
+          </td>
+        </tr>
+      `;
+    });
+
+    tableHTML += `</table>`;
+
+    verseBox.innerHTML += tableHTML;
 
     card.scrollIntoView({ behavior: "smooth" });
   });
