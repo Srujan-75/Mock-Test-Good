@@ -258,6 +258,13 @@ blockquote span {
 
 <div id="siteContent" style="display:none;">
 
+  <div style="text-align:right; margin-bottom:10px;">
+  <button onclick="logout()" style="background:#dc3545;">
+    Logout
+  </button>
+</div>
+
+
 <div class="introCard" style="max-width:900px; margin:auto;">
 <h1>Test Platform</h1>
 
@@ -727,6 +734,28 @@ function showResults() {
     verseBox.innerHTML += tableHTML;
 
     card.scrollIntoView({ behavior: "smooth" });
+  });
+}
+function logout() {
+  auth.signOut().then(() => {
+
+    // Clear user state
+    currentUser = null;
+
+    // Reset UI
+    document.getElementById("siteContent").style.display = "none";
+    document.getElementById("quizBox").style.display = "none";
+    document.getElementById("palette").style.display = "none";
+    document.getElementById("resultCard").style.display = "none";
+
+    // Reset selections
+    document.getElementById("topicSelect").selectedIndex = 0;
+
+    // Show welcome screen again
+    document.getElementById("introScreen").classList.remove("hiddenScreen");
+    document.getElementById("passwordScreen").classList.add("hiddenScreen");
+
+    alert("You have been logged out successfully.");
   });
 }
 
