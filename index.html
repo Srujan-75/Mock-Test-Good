@@ -300,6 +300,7 @@ blockquote span {
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 
 <script>
@@ -314,7 +315,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
+let currentUser = null;
 
   auth.onAuthStateChanged(user => {
   if (user) {
@@ -553,7 +554,7 @@ function updatePalette() {
   showQuestion();
 }
 
-let currentUser = null;
+
 
 function googleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider();
