@@ -15,7 +15,7 @@ body {
 
 body::before {
   content: "";
-  position: fixed;
+  position: center;
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   z-index: -1;
@@ -315,7 +315,7 @@ blockquote span {
 
 <script>
 let reviewTopic = null;   // Stores topic currently in review mode
-let testSubmitted = false;
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDBE1w09eYl78VrNZPq65Hyp8sQ4P5KTqE",
@@ -491,9 +491,6 @@ if (!currentUser) {
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
   
-  testSubmitted = true;
-  reviewMode = false;
-
   alert("Test submitted successfully. Click 'View Results' to see your score.");
 }
 
@@ -705,39 +702,68 @@ function logout() {
 
 function showDetailedAnswers() {
 
-  if (!testSubmitted) {
-    alert("You must complete the test at least once to view detailed answers.");
+  const topic = document.getElementById("topicSelect").value;
+  if (!topic) {
+    alert("Please select a topic first.");
     return;
   }
 
-  reviewTopic = document.getElementById("topicSelect").value;
+  if (!currentUser) {
+    alert("Please login first.");
+    return;
+  }
 
-  document.getElementById("quizBox").style.display = "none";
-  document.getElementById("palette").style.display = "none";
+  const userRef = db.collection("users").doc(currentUser.uid);
 
-  const container = document.getElementById("detailedAnswers");
-  container.innerHTML = "<h3>Detailed Answer Review</h3>";
+  userRef.get().then(doc => {
+    if (!doc.exists) {
+      alert("You have not attempted this test yet.");
+      return;
+    }
 
-  questions.forEach((q, index) => {
-    const userAnsIndex = answers[index];
-    const correctIndex = q.correct;
+    const data = doc.data();
+    const attempts = data.history.filter(h => h.topic === topic);
 
-    const userAnswer = userAnsIndex !== null ? q.options[userAnsIndex] : "Not Attempted";
-    const correctAnswer = q.options[correctIndex];
-    const isCorrect = userAnsIndex === correctIndex;
+    if (attempts.length === 0) {
+      alert("You must attempt this topic at least once before viewing detailed answers.");
+      return;
+    }
 
-    container.innerHTML += `
-      <div style="margin-bottom:20px; padding:15px; border-radius:10px; background:#f9f9f9; border-left:6px solid ${isCorrect ? '#2ecc71' : '#e74c3c'};">
-        <b>Q${index + 1}: ${q.question}</b><br><br>
-        <b>Your Answer:</b> ${userAnswer} <br>
-        <b>Correct Answer:</b> ${correctAnswer} <br><br>
-        <b>Explanation:</b> ${q.explanation || "No explanation provided."}
-      </div>
-    `;
-  });
+    // 🔒 Enable review mode for THIS topic
+    reviewTopic = topic;
 
-  container.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("quizBox").style.display = "none";
+    document.getElementById("palette").style.display = "none";
+
+    const container = document.getElementById("detailedAnswers");
+    container.innerHTML = "<h3>Detailed Answer Review</h3>";
+
+    if (!questions.length) {
+  questions = questionBank[topic];
 }
+
+    questions.forEach((q, index) => {
+      const userAnsIndex = answers[index];
+      const correctIndex = q.correct;
+
+      const userAnswer = userAnsIndex !== null ? q.options[userAnsIndex] : "Not Attempted";
+      const correctAnswer = q.options[correctIndex];
+      const isCorrect = userAnsIndex === correctIndex;
+
+      container.innerHTML += `
+        <div style="margin-bottom:20px; padding:15px; border-radius:10px; background:#f9f9f9; border-left:6px solid ${isCorrect ? '#2ecc71' : '#e74c3c'};">
+          <b>Q${index + 1}: ${q.question}</b><br><br>
+          <b>Your Answer:</b> ${userAnswer} <br>
+          <b>Correct Answer:</b> ${correctAnswer} <br><br>
+          <b>Explanation:</b> ${q.explanation || "No explanation provided."}
+        </div>
+      `;
+    });
+
+    container.scrollIntoView({ behavior: "smooth" });
+  });
+}
+
 
 
 
