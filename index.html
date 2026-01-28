@@ -351,11 +351,18 @@ let currentIndex = 0;
 let score = 0;
 
 function startTest() {
+
+  if (reviewMode) {
+    alert("Close detailed answers before starting a new test.");
+    return;
+  }
+
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
 
-  // ✅ HIDE OLD RESULTS WHEN NEW TEST STARTS
+  // Hide old results & review
   document.getElementById("resultCard").style.display = "none";
+  document.getElementById("detailedAnswers").innerHTML = "";
 
   questions = questionBank[topic];
   currentIndex = 0;
@@ -365,7 +372,6 @@ function startTest() {
   visited = new Array(questions.length).fill(false);
 
   document.getElementById("quizBox").style.display = "block";
-
   document.getElementById("palette").style.display = "grid";
 
   buildPalette();
@@ -707,8 +713,9 @@ function showDetailedAnswers() {
 
 function enterSite() {
   document.getElementById("introScreen").classList.add("hiddenScreen");
-  document.getElementByById("loginScreen").classList.remove("hiddenScreen");
+  document.getElementById("loginScreen").classList.remove("hiddenScreen");
 }
+
 
   
 </script>
