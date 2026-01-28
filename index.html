@@ -359,8 +359,7 @@ let score = 0;
 function startTest() {
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
-  }
-
+  if (reviewMode) return;
 
   // ✅ HIDE OLD RESULTS WHEN NEW TEST STARTS
   document.getElementById("resultCard").style.display = "none";
@@ -548,7 +547,8 @@ function googleLogin() {
         email: user.email
       };
 
-      document.getElementById("passwordScreen").classList.add("hiddenScreen");
+     document.getElementById("loginScreen").classList.add("hiddenScreen");
+
       document.getElementById("siteContent").style.display = "block";
 
       alert(`Welcome ${user.displayName}`);
