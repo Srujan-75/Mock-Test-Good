@@ -300,6 +300,9 @@ blockquote span {
 </button>
 
 <div id="detailedAnswers" style="margin-top:20px; text-align:left;"></div>
+<button onclick="closeReview()" style="background:#dc3545; margin-top:10px;">
+  Close Review
+</button>
 
 </div>
 
@@ -325,6 +328,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 let currentUser = null;
 
+
   auth.onAuthStateChanged(user => {
   if (user) {
     currentUser = {
@@ -346,7 +350,8 @@ document.getElementById("siteContent").style.display = "block";
 
 let answers = [];       // stores selected option index or null
 let visited = [];       // true if question was opened
-
+let testSubmitted = false;   // 🔒 Tracks if user finished at least one test
+let reviewMode = false;      // 📘 True when detailed answers are open
 let questions = [];
 let currentIndex = 0;
 let score = 0;
@@ -354,6 +359,14 @@ let score = 0;
 function startTest() {
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
+
+
+
+  if (reviewMode) {
+    alert("You are currently viewing detailed answers. Close review mode before starting a new test.");
+    return;
+  }
+
 
   // ✅ HIDE OLD RESULTS WHEN NEW TEST STARTS
   document.getElementById("resultCard").style.display = "none";
@@ -400,6 +413,8 @@ function showQuestion() {
 
 
 function nextQuestion() {
+  if (reviewMode) return;
+
   const selected = document.querySelector('input[name="option"]:checked');
 
   if (!selected) {
@@ -415,6 +430,8 @@ function nextQuestion() {
   }
 }
 function prevQuestion() {
+  if (reviewMode) return;
+
   if (currentIndex > 0) {
     currentIndex--;
     showQuestion();
@@ -475,6 +492,8 @@ if (!currentUser) {
   // ✅ END EXAM MODE (NO RESULTS SHOWN)
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
+testSubmitted = true;   // User has now completed a test
+reviewMode = false;     // Reset review mode
 
   alert("Test submitted successfully. Click 'View Results' to see your score.");
 }
@@ -550,6 +569,12 @@ function googleLogin() {
   function retestTopic() {
   const topic = document.getElementById("topicSelect").value;
 
+  if (reviewMode) {
+    alert("Close detailed answers before retesting.");
+    return;
+  }
+
+    
   if (!topic) {
     alert("Please select a topic first");
     return;
@@ -680,6 +705,18 @@ function logout() {
 }
 
 function showDetailedAnswers() {
+
+  if (!testSubmitted) {
+    alert("You must complete the test at least once to view detailed answers.");
+    return;
+  }
+
+  reviewMode = true; // 🔒 Lock exam
+
+  // Hide test UI while reviewing
+  document.getElementById("quizBox").style.display = "none";
+  document.getElementById("palette").style.display = "none";
+
   const container = document.getElementById("detailedAnswers");
   container.innerHTML = "<h3>Detailed Answer Review</h3>";
 
@@ -703,6 +740,13 @@ function showDetailedAnswers() {
   });
 
   container.scrollIntoView({ behavior: "smooth" });
+}
+
+function closeReview() {
+  reviewMode = false;
+
+  document.getElementById("detailedAnswers").innerHTML = "";
+  document.getElementById("resultCard").scrollIntoView({ behavior: "smooth" });
 }
 
   
