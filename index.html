@@ -297,6 +297,9 @@ blockquote span {
     <button onclick="showDetailedAnswers()" style="margin-top:20px; background:#6f42c1;">
   View Detailed Answers
 </button>
+<button onclick="closeReview()" style="margin-top:10px; background:#dc3545;">
+  Close Review
+</button>
 
 <div id="detailedAnswers" style="margin-top:20px; text-align:left;"></div>
 
@@ -736,7 +739,11 @@ function enterSite() {
   document.getElementById("introScreen").classList.add("hiddenScreen");
   document.getElementById("loginScreen").classList.remove("hiddenScreen");
 }
-
+function closeReview() {
+  reviewMode = false;
+  document.getElementById("detailedAnswers").innerHTML = "";
+  document.getElementById("palette").style.display = "grid";
+}
 
   
 </script>
