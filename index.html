@@ -359,12 +359,6 @@ let score = 0;
 function startTest() {
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
-
-
-
-  if (reviewMode) {
-    alert("You are currently viewing detailed answers. Close review mode before starting a new test.");
-    return;
   }
 
 
@@ -413,7 +407,7 @@ function showQuestion() {
 
 
 function nextQuestion() {
-  if (reviewMode) return;
+  
 
   const selected = document.querySelector('input[name="option"]:checked');
 
@@ -430,7 +424,6 @@ function nextQuestion() {
   }
 }
 function prevQuestion() {
-  if (reviewMode) return;
 
   if (currentIndex > 0) {
     currentIndex--;
