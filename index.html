@@ -314,7 +314,7 @@ blockquote span {
 
 
 <script>
-let reviewMode = false;
+let reviewTopic = null;   // Stores topic currently in review mode
 let testSubmitted = false;
 
 const firebaseConfig = {
@@ -357,15 +357,15 @@ let score = 0;
 
 function startTest() {
 
-  if (reviewMode) {
-    alert("Close detailed answers before starting a new test.");
-    return;
-  }
-
   const topic = document.getElementById("topicSelect").value;
   if (!topic) return;
 
-  // Hide old results & review
+  // 🚫 Block ONLY if same topic is under review
+  if (reviewTopic === topic) {
+    alert("Close detailed answers before retaking this topic.");
+    return;
+  }
+
   document.getElementById("resultCard").style.display = "none";
   document.getElementById("detailedAnswers").innerHTML = "";
 
@@ -382,6 +382,7 @@ function startTest() {
   buildPalette();
   showQuestion();
 }
+
 
 
 function showQuestion() {
@@ -410,7 +411,7 @@ function showQuestion() {
 
 
 function nextQuestion() {
-  if (reviewMode) return;
+ if (reviewTopic === document.getElementById("topicSelect").value) return;
 
   const selected = document.querySelector('input[name="option"]:checked');
 
@@ -427,7 +428,7 @@ function nextQuestion() {
   }
 }
 function prevQuestion() {
-  if (reviewMode) return;
+  if (reviewTopic === document.getElementById("topicSelect").value) return;
 
   if (currentIndex > 0) {
     currentIndex--;
@@ -565,20 +566,24 @@ function googleLogin() {
 }
 
 
-  function retestTopic() {
-  const topic = document.getElementById("topicSelect").value;
+ function retestTopic() {
 
+  const topic = document.getElementById("topicSelect").value;
   if (!topic) {
     alert("Please select a topic first");
     return;
   }
 
-  // Hide results
-  document.getElementById("resultCard").style.display = "none";
+  // If this topic is under review, close review mode first
+  if (reviewTopic === topic) {
+    reviewTopic = null;
+    document.getElementById("detailedAnswers").innerHTML = "";
+  }
 
-  // Restart test (reuse existing logic)
+  document.getElementById("resultCard").style.display = "none";
   startTest();
 }
+
 
   function showResults() {
     if (!currentUser) {
@@ -705,7 +710,7 @@ function showDetailedAnswers() {
     return;
   }
 
-  reviewMode = true;
+  reviewTopic = document.getElementById("topicSelect").value;
 
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
@@ -733,6 +738,7 @@ function showDetailedAnswers() {
 
   container.scrollIntoView({ behavior: "smooth" });
 }
+
 
 
 function enterSite() {
