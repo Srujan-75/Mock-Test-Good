@@ -311,6 +311,8 @@ blockquote span {
 
 
 <script>
+let reviewMode = false;
+let testSubmitted = false;
 
 const firebaseConfig = {
   apiKey: "AIzaSyDBE1w09eYl78VrNZPq65Hyp8sQ4P5KTqE",
@@ -405,6 +407,8 @@ function showQuestion() {
 
 
 function nextQuestion() {
+  if (reviewMode) return;
+
   const selected = document.querySelector('input[name="option"]:checked');
 
   if (!selected) {
@@ -420,6 +424,8 @@ function nextQuestion() {
   }
 }
 function prevQuestion() {
+  if (reviewMode) return;
+
   if (currentIndex > 0) {
     currentIndex--;
     showQuestion();
@@ -480,6 +486,9 @@ if (!currentUser) {
   // ✅ END EXAM MODE (NO RESULTS SHOWN)
   document.getElementById("quizBox").style.display = "none";
   document.getElementById("palette").style.display = "none";
+  
+  testSubmitted = true;
+  reviewMode = false;
 
   alert("Test submitted successfully. Click 'View Results' to see your score.");
 }
@@ -541,7 +550,8 @@ function googleLogin() {
         email: user.email
       };
 
-      document.getElementById("passwordScreen").classList.add("hiddenScreen");
+     document.getElementById("loginScreen").classList.add("hiddenScreen");
+
       document.getElementById("siteContent").style.display = "block";
 
       alert(`Welcome ${user.displayName}`);
@@ -678,13 +688,25 @@ function logout() {
 
     // Show welcome screen again
     document.getElementById("introScreen").classList.remove("hiddenScreen");
-    document.getElementById("passwordScreen").classList.add("hiddenScreen");
+   document.getElementById("loginScreen").classList.add("hiddenScreen");
+
 
     alert("You have been logged out successfully.");
   });
 }
 
 function showDetailedAnswers() {
+
+  if (!testSubmitted) {
+    alert("You must complete the test at least once to view detailed answers.");
+    return;
+  }
+
+  reviewMode = true;
+
+  document.getElementById("quizBox").style.display = "none";
+  document.getElementById("palette").style.display = "none";
+
   const container = document.getElementById("detailedAnswers");
   container.innerHTML = "<h3>Detailed Answer Review</h3>";
 
@@ -694,7 +716,6 @@ function showDetailedAnswers() {
 
     const userAnswer = userAnsIndex !== null ? q.options[userAnsIndex] : "Not Attempted";
     const correctAnswer = q.options[correctIndex];
-
     const isCorrect = userAnsIndex === correctIndex;
 
     container.innerHTML += `
