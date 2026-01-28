@@ -224,7 +224,7 @@ blockquote span {
       <br><span>— Proverbs 18:15</span>
     </blockquote>
 
-    <button onclick="enterSite()">Start Test</button>
+    <button onclick="enterSite()">Let's Go</button>
   </div>
 </div>
 
@@ -702,6 +702,12 @@ function showDetailedAnswers() {
   });
 
   container.scrollIntoView({ behavior: "smooth" });
+}
+
+
+function enterSite() {
+  document.getElementById("introScreen").classList.add("hiddenScreen");
+  document.getElementByById("loginScreen").classList.remove("hiddenScreen");
 }
 
   
