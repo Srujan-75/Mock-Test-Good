@@ -156,6 +156,38 @@
       background: linear-gradient(135deg,#2ecc71,#27ae60);
     }
 
+.result-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.result-actions button {
+  padding: 10px 22px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.review-btn {
+  background: #6f42c1;
+}
+
+.close-btn {
+  background: #6c757d;
+}
+
+.result-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+    
     .verse {
       margin-top: 20px;
       font-style: italic;
@@ -339,11 +371,25 @@
     </div>
   </div>
 
-  <div id="resultCard" style="display:none;">
-    <h2>Test Result</h2>
-    <div id="scoreCircle" class="score-circle"></div>
-    <div id="bibleVerse" class="verse"></div>
+<div id="resultCard" style="display:none;">
+  <h2>Test Result</h2>
+
+  <div id="scoreCircle" class="score-circle"></div>
+
+  <div id="bibleVerse" class="verse"></div>
+
+  <div class="result-actions">
+    <button class="review-btn" onclick="showDetailedAnswers()">
+      View Detailed Answers
+    </button>
+    <button class="close-btn" onclick="closeReview()">
+      Close Review
+    </button>
   </div>
+
+  <div id="detailedAnswers" style="margin-top:20px; text-align:left;"></div>
+</div>
+
 
 </div>
 
