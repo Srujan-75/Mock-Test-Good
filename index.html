@@ -3,66 +3,29 @@
 <head>
   <title>Mock Test Platform</title>
    <style>
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
 body {
-  margin: 0;
-  height: 100vh;
   display: flex;
-  justify-content: center;  /* horizontal center */
-  align-items: center;      /* vertical center */
+  justify-content: center;
+  align-items: center;
   background-image: url("nature.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
 
-
 /* Dark overlay */
 body::before {
   content: "";
-  position: fixed;   /* 🔥 was wrong before */
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   z-index: -1;
-}
-
-h1 {
-  text-align: center;
-}
-
-#quizBox {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: auto;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-label {
-  display: block;
-  margin: 8px 0;
-}
-
-select {
-  display: block;
-  margin: 20px auto;
-  padding: 8px;
-  font-size: 16px;
 }
 
 /* 🌿 Intro Screen */
@@ -87,10 +50,7 @@ select {
   margin-bottom: 15px;
 }
 
-
-.introCard h2 {
-  margin-bottom: 10px;
-}
+/* 🔐 Login Box */
 .login-box {
   background: white;
   padding: 40px;
@@ -100,32 +60,69 @@ select {
   width: 350px;
 }
 
-.introCard p {
-  font-size: 15px;
-  color: #333;
+/* 🚀 Main Platform Card */
+.platform-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  width: 700px;
+  max-width: 95%;
 }
 
-blockquote {
-  font-style: italic;
-  margin: 15px 0;
-  color: #2c3e50;
+.platform-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-blockquote span {
-  font-size: 13px;
-  color: #555;
+.platform-content h1 {
+  text-align: center;
+  margin: 0;
 }
 
-#siteContent {
-  min-height: 100vh;
-  padding: 30px;
+/* Dropdown full width */
+.platform-content select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
+/* 🎯 Button Row */
+.button-row {
+  display: flex;
+  gap: 15px;
+}
 
+.button-row button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s ease;
+}
 
+.view-btn { background: #0d6efd; }
+.reset-btn { background: #28a745; }
 
-.hiddenScreen {
-  display: none !important;
+.button-row button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Quiz + Palette Area */
+#quizBox {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 #palette {
@@ -139,28 +136,12 @@ blockquote span {
 .palette-btn {
   width: 32px;
   height: 32px;
-  padding: 0;
   font-size: 13px;
   font-weight: bold;
   border: 1px solid #999;
   cursor: pointer;
   background: #fff;
   border-radius: 4px;
-}
-.palette-current {
-  border: 2px solid #007bff;
-}
-
-
-
-.palette-answered {
-  background: #4caf50;
-  color: white;
-}
-
-.palette-seen {
-  background: #f44336;
-  color: white;
 }
 
 /* 🎯 Result Card */
@@ -174,7 +155,6 @@ blockquote span {
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
-/* 🔵 Score Circle */
 .score-circle {
   width: 140px;
   height: 140px;
@@ -188,34 +168,13 @@ blockquote span {
   color: white;
 }
 
-.score-good {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
+.score-good { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.score-average { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+.score-poor { background: linear-gradient(135deg, #e74c3c, #c0392b); }
 
-.score-average {
-  background: linear-gradient(135deg, #f1c40f, #f39c12);
-}
-
-.score-poor {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-/* 📖 Verse */
-.verse {
-  margin-top: 20px;
-  font-style: italic;
-  font-size: 16px;
-  color: #2c3e50;
-}
-
-.verse span {
-  display: block;
-  margin-top: 6px;
-  font-size: 14px;
-  color: #555;
-}
-
+.hiddenScreen { display: none !important; }
 </style>
+
 </head>
 <body>
 
@@ -263,62 +222,36 @@ blockquote span {
 </div>
 
 
-<div class="introCard" style="max-width:900px; margin:auto;">
-<h1>Test Platform</h1>
+<div class="platform-card">
+  <div class="platform-content">
+    <h1>Test Platform</h1>
 
-<select id="topicSelect" onchange="startTest()">
-  <option value="" selected disabled>-- Select Topic --</option>
-  <option value="Bible">Bible</option>
-  <option value="CS_and_CG_MOSFET_Small_Signal">CS_and_CG_MOSFET_Small_Signal</option>
-</select>
-  
-<button onclick="showResults()" style="margin-top:10px;">
-  View Results
-</button>
+    <select id="topicSelect" onchange="startTest()">
+      <option value="" selected disabled>-- Select Topic --</option>
+      <option value="Bible">Bible</option>
+      <option value="CS_and_CG_MOSFET_Small_Signal">CS and CG MOSFET Small Signal</option>
+    </select>
 
-<button onclick="retestTopic()" style="margin-top:10px; background:#28a745;">
-  Retest
-</button>
+    <div class="button-row">
+      <button class="view-btn" onclick="showResults()">View Results</button>
+      <button class="reset-btn" onclick="retestTopic()">Retest</button>
+    </div>
 
+    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+      <div id="quizBox" style="display:none;">
+        <h3 id="questionText"></h3>
+        <div id="options"></div>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button onclick="prevQuestion()">Previous</button>
+          <button onclick="nextQuestion()">Next</button>
+        </div>
+      </div>
 
-<div style="display:flex; gap:20px; justify-content:center;">
-
-  <!-- Question Area -->
-  <div id="quizBox" style="display:none; margin-top:20px;">
-    <h3 id="questionText"></h3>
-    <div id="options"></div>
-   <div style="display:flex; gap:10px; justify-content:center;">
-  <button onclick="prevQuestion()">Previous</button>
-  <button onclick="nextQuestion()">Next</button>
-</div>
-
+      <div id="palette"></div>
+    </div>
   </div>
-
-  <!-- Question Palette -->
-  <div id="palette"></div>
-
-</div>
 </div>
 
-
-  <div id="resultCard" style="display:none;">
-  <h2>Test Result</h2>
-
-  <div id="scoreCircle" class="score-circle"></div>
-
-  <div id="bibleVerse" class="verse"></div>
-    <button onclick="showDetailedAnswers()" style="margin-top:20px; background:#6f42c1;">
-  View Detailed Answers
-</button>
-<button onclick="closeReview()" style="margin-top:20px; background:#6f42c2;">
-  Close Review
-</button>
-
-<div id="detailedAnswers" style="margin-top:20px; text-align:left;"></div>
-
-</div>
-
-</div>
 <script src="questions.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
