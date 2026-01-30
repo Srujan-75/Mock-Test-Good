@@ -2,208 +2,208 @@
 <html>
 <head>
   <title>Mock Test Platform</title>
-   <style>
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: url("nature.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url("nature.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
 
-/* Dark overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.25);
-  z-index: -1;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      z-index: -1;
+    }
 
-/* 🌿 Intro Screen */
-#introScreen {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .hiddenScreen { display: none !important; }
 
-.introCard {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
+    /* Intro */
+    #introScreen {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-.studentImg {
-  width: 150px;
-  margin-bottom: 15px;
-}
+    .introCard {
+      background: rgba(255,255,255,0.9);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
 
-/* 🔐 Login Box */
-.login-box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  text-align: center;
-  width: 350px;
-}
+    .studentImg { width: 150px; margin-bottom: 15px; }
 
-/* 🚀 Main Platform Card */
-.platform-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 40px 50px;
-  border-radius: 16px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-  width: 700px;
-  max-width: 95%;
-}
+    /* Login */
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      text-align: center;
+      width: 350px;
+    }
 
-.platform-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+    /* Main Platform Card */
+    #siteContent {
+      min-height: 100vh;
+      padding: 30px;
+      width: 100%;
+    }
 
-.platform-content h1 {
-  text-align: center;
-  margin: 0;
-}
+    .platform-card {
+      background: rgba(255,255,255,0.95);
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      width: 700px;
+      max-width: 95%;
+      margin: auto;
+    }
 
-/* Dropdown full width */
-.platform-content select {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
+    .platform-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
 
-/* 🎯 Button Row */
-.button-row {
-  display: flex;
-  gap: 15px;
-}
+    .platform-content h1 {
+      margin-bottom: 5px;
+    }
 
-.button-row button {
-  flex: 1;
-  padding: 12px 0;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  transition: 0.2s ease;
-}
+    /* Dropdown styled like screenshot */
+    .platform-content select {
+      width: 320px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-.view-btn { background: #0d6efd; }
-.reset-btn { background: #28a745; }
+    /* Button Row */
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
 
-.button-row button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+    .button-row button {
+      padding: 10px 22px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      transition: 0.2s ease;
+    }
 
-/* Quiz + Palette Area */
-#quizBox {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+    .view-btn { background: #0d6efd; }
+    .reset-btn { background: #28a745; }
 
-#palette {
-  width: 160px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  align-content: start;
-}
+    .button-row button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
 
-.palette-btn {
-  width: 32px;
-  height: 32px;
-  font-size: 13px;
-  font-weight: bold;
-  border: 1px solid #999;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 4px;
-}
+    /* Quiz Box */
+    #quizBox {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-/* 🎯 Result Card */
-#resultCard {
-  background: rgba(255, 255, 255, 0.95);
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
+    /* Result Card */
+    #resultCard {
+      background: rgba(255,255,255,0.95);
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
 
-.score-circle {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  margin: 20px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-weight: bold;
-  color: white;
-}
+    .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg,#2ecc71,#27ae60);
+    }
 
-.score-good { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-.score-average { background: linear-gradient(135deg, #f1c40f, #f39c12); }
-.score-poor { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .verse {
+      margin-top: 20px;
+      font-style: italic;
+      font-size: 16px;
+      color: #2c3e50;
+    }
 
-.hiddenScreen { display: none !important; }
-</style>
+    .verse span {
+      display: block;
+      margin-top: 6px;
+      font-size: 14px;
+      color: #555;
+    }
 
+    #palette {
+      width: 160px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      align-content: start;
+    }
+
+    .palette-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #999;
+      cursor: pointer;
+      background: #fff;
+      border-radius: 4px;
+    }
+  </style>
 </head>
+
 <body>
 
 <div id="introScreen">
   <div class="introCard">
-    <img src="student.png" alt="Student" class="studentImg">
-
+    <img src="student.png" class="studentImg">
     <h2>Hi! Welcome 👋</h2>
-
-    <p>
-      I’m here to help you test your knowledge and grow step by step.
-      Take a deep breath, focus, and give your best!
-    </p>
-
-    <blockquote>
-      “The mind of the prudent acquires knowledge,
-      and the ear of the wise seeks knowledge.”
-      <br><span>— Proverbs 18:15</span>
-    </blockquote>
-
+    <p>I’m here to help you test your knowledge and grow step by step.</p>
     <button onclick="enterSite()">Let's Go</button>
   </div>
 </div>
 
-
-
 <div id="loginScreen" class="hiddenScreen">
-  
- <div class="login-box">
+  <div class="login-box">
     <h2>Login Required</h2>
     <p>Please sign in using Google to continue</p>
     <button onclick="googleLogin()">Login with Google</button>
@@ -211,45 +211,48 @@ body::before {
   </div>
 </div>
 
-
-
 <div id="siteContent" style="display:none;">
 
   <div style="text-align:right; margin-bottom:10px;">
-  <button onclick="logout()" style="background:#dc3545;">
-    Logout
-  </button>
-</div>
+    <button onclick="logout()" style="background:#dc3545; padding:8px 16px; border-radius:6px; color:white; border:none;">Logout</button>
+  </div>
 
+  <div class="platform-card">
+    <div class="platform-content">
+      <h1>Test Platform</h1>
 
-<div class="platform-card">
-  <div class="platform-content">
-    <h1>Test Platform</h1>
+      <select id="topicSelect" onchange="startTest()">
+        <option value="" selected disabled>-- Select Topic --</option>
+        <option value="Bible">Bible</option>
+        <option value="CS_and_CG_MOSFET_Small_Signal">CS and CG MOSFET Small Signal</option>
+      </select>
 
-    <select id="topicSelect" onchange="startTest()">
-      <option value="" selected disabled>-- Select Topic --</option>
-      <option value="Bible">Bible</option>
-      <option value="CS_and_CG_MOSFET_Small_Signal">CS and CG MOSFET Small Signal</option>
-    </select>
-
-    <div class="button-row">
-      <button class="view-btn" onclick="showResults()">View Results</button>
-      <button class="reset-btn" onclick="retestTopic()">Retest</button>
-    </div>
-
-    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
-      <div id="quizBox" style="display:none;">
-        <h3 id="questionText"></h3>
-        <div id="options"></div>
-        <div style="display:flex; gap:10px; justify-content:center;">
-          <button onclick="prevQuestion()">Previous</button>
-          <button onclick="nextQuestion()">Next</button>
-        </div>
+      <div class="button-row">
+        <button class="view-btn" onclick="showResults()">View Results</button>
+        <button class="reset-btn" onclick="retestTopic()">Retest</button>
       </div>
 
-      <div id="palette"></div>
+      <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+        <div id="quizBox" style="display:none;">
+          <h3 id="questionText"></h3>
+          <div id="options"></div>
+          <div style="display:flex; gap:10px; justify-content:center;">
+            <button onclick="prevQuestion()">Previous</button>
+            <button onclick="nextQuestion()">Next</button>
+          </div>
+        </div>
+
+        <div id="palette"></div>
+      </div>
     </div>
   </div>
+
+  <div id="resultCard" style="display:none;">
+    <h2>Test Result</h2>
+    <div id="scoreCircle" class="score-circle"></div>
+    <div id="bibleVerse" class="verse"></div>
+  </div>
+
 </div>
 
 <script src="questions.js"></script>
