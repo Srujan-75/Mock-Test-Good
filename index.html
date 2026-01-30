@@ -188,28 +188,120 @@
       background: #fff;
       border-radius: 4px;
     }
+
+/* 🌄 Center all screens */
+.screen-center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🌟 Card Style (used for intro + login) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  padding: 40px 50px;
+  border-radius: 20px;
+  text-align: center;
+  width: 600px;
+  max-width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* 👋 Profile Image */
+.welcome-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+/* Title */
+.glass-card h1 {
+  margin: 10px 0;
+  font-size: 32px;
+}
+
+/* Description text */
+.glass-card p {
+  font-size: 17px;
+  color: #444;
+  margin: 10px 0;
+}
+
+/* Quote */
+.glass-card blockquote {
+  font-style: italic;
+  color: #2c3e50;
+  margin: 20px 0 10px;
+}
+
+.glass-card blockquote span {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Primary Button */
+.primary-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background: #0d6efd;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+
   </style>
 </head>
 
 <body>
 
-<div id="introScreen">
-  <div class="introCard">
-    <img src="student.png" class="studentImg">
-    <h2>Hi! Welcome 👋</h2>
-    <p>I’m here to help you test your knowledge and grow step by step.</p>
-    <button onclick="enterSite()">Let's Go</button>
+<div id="introScreen" class="screen-center">
+  <div class="glass-card">
+    <img src="student.png" alt="Student" class="welcome-img">
+
+    <h1>Hi! Welcome 👋</h1>
+
+    <p>
+      I’m here to help you test your knowledge and grow step by step.
+      Take a deep breath, focus, and give your best!
+    </p>
+
+    <blockquote>
+      “The mind of the prudent acquires knowledge,  
+      and the ear of the wise seeks knowledge.”
+      <span>— Proverbs 18:15</span>
+    </blockquote>
+
+    <button class="primary-btn" onclick="enterSite()">Let’s Go</button>
   </div>
 </div>
 
-<div id="loginScreen" class="hiddenScreen">
-  <div class="login-box">
-    <h2>Login Required</h2>
+
+<div id="loginScreen" class="hiddenScreen screen-center">
+  <div class="glass-card">
+    <h1>Login Required</h1>
     <p>Please sign in using Google to continue</p>
-    <button onclick="googleLogin()">Login with Google</button>
-    <p id="loginError" style="color:red;"></p>
+
+    <button class="primary-btn" onclick="googleLogin()">Login with Google</button>
+
+    <p id="loginError" style="color:red; margin-top:10px;"></p>
   </div>
 </div>
+
 
 <div id="siteContent" style="display:none;">
 
