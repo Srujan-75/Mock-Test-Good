@@ -3,22 +3,17 @@
 <head>
   <title>Mock Test Platform</title>
    <style>
-html, body {
-  height: 100%;
-  margin: 0;
-}
 
 body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
   background-image: url("nature.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-
-  display: flex;
-  justify-content: center;   /* horizontal center */
-  align-items: center;       /* vertical center */
 }
+
 
 /* Dark overlay */
 body::before {
@@ -28,8 +23,6 @@ body::before {
   background: rgba(0, 0, 0, 0.25);
   z-index: -1;
 }
-
-
 
 h1 {
   text-align: center;
