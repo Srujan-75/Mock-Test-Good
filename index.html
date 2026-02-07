@@ -788,13 +788,13 @@ function logout() {
 }
 
 function showDetailedAnswers() {
-
   const topic = document.getElementById("topicSelect").value;
+
+  // 1. Basic validation
   if (!topic) {
     alert("Please select a topic first.");
     return;
   }
-
   if (!currentUser) {
     alert("Please login first.");
     return;
@@ -819,26 +819,32 @@ function showDetailedAnswers() {
     // 🔒 Enable review mode for THIS topic
     reviewTopic = topic;
 
-    document.getElementById("quizBox").style.display = "block";
-    document.getElementById("palette").style.display = "block";
+    // 🛠️ THE FIX: Hide the quiz elements so only the selection & answers remain
+    document.getElementById("quizBox").style.display = "none"; 
+    document.getElementById("palette").style.display = "none";
+    
+    // Ensure the results card (container for detailedAnswers) is visible
+    document.getElementById("resultCard").style.display = "block";
 
     const container = document.getElementById("detailedAnswers");
     container.innerHTML = "<h3>Detailed Answer Review</h3>";
 
-    if (!questions.length) {
-  questions = questionBank[topic];
-}
+    // Ensure questions are loaded for the loop
+    if (!questions || questions.length === 0) {
+      questions = questionBank[topic];
+    }
 
     questions.forEach((q, index) => {
       const userAnsIndex = answers[index];
       const correctIndex = q.correct;
 
-      const userAnswer = userAnsIndex !== null ? q.options[userAnsIndex] : "Not Attempted";
+      // Logic to determine what the user picked vs reality
+      const userAnswer = (userAnsIndex !== null && userAnsIndex !== undefined) ? q.options[userAnsIndex] : "Not Attempted";
       const correctAnswer = q.options[correctIndex];
       const isCorrect = userAnsIndex === correctIndex;
 
       container.innerHTML += `
-        <div style="margin-bottom:20px; padding:15px; border-radius:10px; background:#f9f9f9; border-left:6px solid ${isCorrect ? '#2ecc71' : '#e74c3c'};">
+        <div style="margin-bottom:20px; padding:15px; border-radius:10px; background:#f9f9f9; border-left:6px solid ${isCorrect ? '#2ecc71' : '#e74c3c'}; text-align: left;">
           <b>Q${index + 1}: ${q.question}</b><br><br>
           <b>Your Answer:</b> ${userAnswer} <br>
           <b>Correct Answer:</b> ${correctAnswer} <br><br>
@@ -860,17 +866,20 @@ function enterSite() {
 }
   
 function closeReview() {
+  // Reset the review flag
+  reviewTopic = null;
 
-  reviewTopic = null;  // ✅ unlock topic
-
+  // Clear the detailed answers text
   document.getElementById("detailedAnswers").innerHTML = "";
-
+  
+  // Hide the result card entirely
   document.getElementById("resultCard").style.display = "none";
 
-  document.getElementById("quizBox").style.display = "none";
-
-  document.getElementById("palette").style.display = "none";
-
+  // Bring back the Palette (selection buttons)
+  document.getElementById("palette").style.display = "grid";
+  
+  // Scroll back to the topic selection area
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
   
