@@ -858,10 +858,19 @@ function enterSite() {
   document.getElementById("introScreen").classList.add("hiddenScreen");
   document.getElementById("loginScreen").classList.remove("hiddenScreen");
 }
+  
 function closeReview() {
-  reviewMode = false;
+
+  reviewTopic = null;  // ✅ unlock topic
+
   document.getElementById("detailedAnswers").innerHTML = "";
-  document.getElementById("palette").style.display = "grid";
+
+  document.getElementById("resultCard").style.display = "none";
+
+  document.getElementById("quizBox").style.display = "none";
+
+  document.getElementById("palette").style.display = "none";
+
 }
 
   
